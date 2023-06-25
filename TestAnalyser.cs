@@ -47,7 +47,7 @@ class MoodAnalyser
         catch (MoodAnalysisException ex)
         {
             Console.WriteLine("Exception occurred: " + ex.Message);
-            return "HAPPY";
+            throw;
         }
     }
 }
@@ -82,12 +82,11 @@ public class TestAnalyser
     }
 
     [TestMethod]
-    public void TestAnalyseMood_NullMessage_ReturnsHappy()
+    public void TestAnalyseMood_NullMessage_ThrowsMoodAnalysisException()
     {
         string message = null;
         moodAnalyser = new MoodAnalyser(message);
-        string result = moodAnalyser.AnalyseMood();
-        Assert.AreEqual("HAPPY", result);
+        Assert.ThrowsException<MoodAnalysisException>(() => moodAnalyser.AnalyseMood());
     }
 
     [TestMethod]
