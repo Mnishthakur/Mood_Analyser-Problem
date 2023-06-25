@@ -1,4 +1,20 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+enum MoodAnalysisError
+{
+    NULL_MOOD,
+    EMPTY_MOOD
+}
+
+class MoodAnalysisException : Exception
+{
+    public MoodAnalysisError Error { get; }
+
+    public MoodAnalysisException(MoodAnalysisError error, string message) : base(message)
+    {
+        Error = error;
+    }
+}
+
 class MoodAnalyser
 {
     private string message;
@@ -18,14 +34,17 @@ class MoodAnalyser
         try
         {
             if (message is null)
-                throw new ArgumentNullException("message", "Mood message cannot be null.");
+                throw new MoodAnalysisException(MoodAnalysisError.NULL_MOOD, "Mood message cannot be null.");
+
+            if (string.IsNullOrWhiteSpace(message))
+                throw new MoodAnalysisException(MoodAnalysisError.EMPTY_MOOD, "Mood message cannot be empty.");
 
             if (message.ToLower().Contains("sad"))
                 return "SAD";
             else
                 return "HAPPY";
         }
-        catch (Exception ex)
+        catch (MoodAnalysisException ex)
         {
             Console.WriteLine("Exception occurred: " + ex.Message);
             return "HAPPY";
@@ -66,6 +85,15 @@ public class TestAnalyser
     public void TestAnalyseMood_NullMessage_ReturnsHappy()
     {
         string message = null;
+        moodAnalyser = new MoodAnalyser(message);
+        string result = moodAnalyser.AnalyseMood();
+        Assert.AreEqual("HAPPY", result);
+    }
+
+    [TestMethod]
+    public void TestAnalyseMood_EmptyMessage_ReturnsHappy()
+    {
+        string message = "";
         moodAnalyser = new MoodAnalyser(message);
         string result = moodAnalyser.AnalyseMood();
         Assert.AreEqual("HAPPY", result);
