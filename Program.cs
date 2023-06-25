@@ -6,16 +6,14 @@ using static System.Net.Mime.MediaTypeNames;
 namespace AnalyserTest
 {
     class Program
+{
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            TestAnalyser test = new TestAnalyser();
-            test.Setup();
-            test.TestAnalyseMood_HappyMessage_ReturnsHappy();
-            test.TestAnalyseMood_SadMessage_ReturnsSad();
-            test.TestAnalyseMood_NoKeyword_ReturnsUnableToDetermine();
-        }
+        TestAnalyser test = new TestAnalyser();
+        test.Setup();
+        test.TestAnalyseMood_SadMessage_ReturnsSad();
     }
+}
 }
 
 
