@@ -14,6 +14,7 @@ class Program
         test.TestAnalyseMood_AnyMessage_ReturnsHappy();
         test.TestAnalyseMood_NullMessage_ThrowsMoodAnalysisException();
         test.TestAnalyseMood_EmptyMessage_ThrowsMoodAnalysisException();
+        test.TestCreateMoodAnalyserObject_ReturnsMoodAnalyserObject();
     }
 }
 
