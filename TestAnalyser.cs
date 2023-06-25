@@ -1,5 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-enum MoodAnalysisError
+using System;
+using System.Reflection;
+
+namespace TestAnalyser
+{
+    enum MoodAnalysisError
 {
     NULL_MOOD,
     EMPTY_MOOD
@@ -52,6 +57,17 @@ class MoodAnalyser
     }
 }
 
+class MoodAnalyserFactory
+{
+    public static MoodAnalyser CreateMoodAnalyserObject()
+    {
+        Type type = typeof(MoodAnalyser);
+        ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+        MoodAnalyser moodAnalyser = (MoodAnalyser)constructor.Invoke(null);
+        return moodAnalyser;
+    }
+}
+
 [TestClass]
 public class TestAnalyser
 {
@@ -96,5 +112,15 @@ public class TestAnalyser
         moodAnalyser = new MoodAnalyser(message);
         Assert.ThrowsException<MoodAnalysisException>(() => moodAnalyser.AnalyseMood());
     }
+
+    [TestMethod]
+    public void TestCreateMoodAnalyserObject_ReturnsMoodAnalyserObject()
+    {
+        MoodAnalyser moodAnalyser = MoodAnalyserFactory.CreateMoodAnalyserObject();
+        Assert.IsNotNull(moodAnalyser);
+    }
 }
+}
+
+
 
