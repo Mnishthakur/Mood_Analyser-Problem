@@ -1,7 +1,19 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 class MoodAnalyser
 {
-    public string AnalyseMood(string message)
+    private string message;
+
+    public MoodAnalyser()
+    {
+        message = "";
+    }
+
+    public MoodAnalyser(string message)
+    {
+        this.message = message;
+    }
+
+    public string AnalyseMood()
     {
         if (message.ToLower().Contains("sad"))
             return "SAD";
@@ -25,7 +37,8 @@ public class TestAnalyser
     public void TestAnalyseMood_SadMessage_ReturnsSad()
     {
         string message = "I am in Sad Mood";
-        string result = moodAnalyser.AnalyseMood(message);
+        moodAnalyser = new MoodAnalyser(message);
+        string result = moodAnalyser.AnalyseMood();
         Assert.AreEqual("SAD", result);
     }
 
@@ -33,8 +46,11 @@ public class TestAnalyser
     public void TestAnalyseMood_AnyMessage_ReturnsHappy()
     {
         string message = "I am in Any Mood";
-        string result = moodAnalyser.AnalyseMood(message);
+        moodAnalyser = new MoodAnalyser(message);
+        string result = moodAnalyser.AnalyseMood();
         Assert.AreEqual("HAPPY", result);
     }
+}
+
 }
 
