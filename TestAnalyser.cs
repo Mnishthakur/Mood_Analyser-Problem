@@ -90,12 +90,11 @@ public class TestAnalyser
     }
 
     [TestMethod]
-    public void TestAnalyseMood_EmptyMessage_ReturnsHappy()
+    public void TestAnalyseMood_EmptyMessage_ThrowsMoodAnalysisException()
     {
         string message = "";
         moodAnalyser = new MoodAnalyser(message);
-        string result = moodAnalyser.AnalyseMood();
-        Assert.AreEqual("HAPPY", result);
+        Assert.ThrowsException<MoodAnalysisException>(() => moodAnalyser.AnalyseMood());
     }
 }
 
