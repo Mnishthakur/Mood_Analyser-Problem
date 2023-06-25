@@ -17,8 +17,8 @@ class MoodAnalyser
     {
         try
         {
-            if (string.IsNullOrEmpty(message))
-                throw new ArgumentNullException("message", "Mood message cannot be null or empty.");
+            if (message is null)
+                throw new ArgumentNullException("message", "Mood message cannot be null.");
 
             if (message.ToLower().Contains("sad"))
                 return "SAD";
@@ -28,7 +28,7 @@ class MoodAnalyser
         catch (Exception ex)
         {
             Console.WriteLine("Exception occurred: " + ex.Message);
-            return "Unable to determine the mood.";
+            return "HAPPY";
         }
     }
 }
@@ -63,14 +63,12 @@ public class TestAnalyser
     }
 
     [TestMethod]
-    public void TestAnalyseMood_NullMessage_ReturnsUnableToDetermine()
+    public void TestAnalyseMood_NullMessage_ReturnsHappy()
     {
         string message = null;
         moodAnalyser = new MoodAnalyser(message);
         string result = moodAnalyser.AnalyseMood();
-        Assert.AreEqual("Unable to determine the mood.", result);
+        Assert.AreEqual("HAPPY", result);
     }
-}
-
 }
 
