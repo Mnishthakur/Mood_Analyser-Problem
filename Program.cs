@@ -13,9 +13,15 @@ class Program
         test.TestAnalyseMood_SadMessage_ReturnsSad();
         test.TestAnalyseMood_AnyMessage_ReturnsHappy();
         test.TestAnalyseMood_NullMessage_ThrowsMoodAnalysisException();
-        test.TestAnalyseMood_EmptyMessage_ReturnsHappy();
+        test.TestAnalyseMood_EmptyMessage_ThrowsMoodAnalysisException();
     }
 }
+
+
+
+
+
+
 
 
 
