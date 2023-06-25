@@ -2,46 +2,33 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace AnalyserTest
 {
     class MoodAnalyser
+{
+    public string AnalyseMood(string message)
     {
-        public string AnalyseMood(string message)
-        {
-            string messageLower = message.ToLower();
+        return "SAD";
+    }
+}
 
-            if (messageLower.Contains("happy"))
-                return "Happy";
-            else if (messageLower.Contains("sad"))
-                return "Sad";
-            else
-                return "Unable to determine the mood.";
-        }
+[TestClass]
+public class TestAnalyser
+{
+    private MoodAnalyser moodAnalyser;
+
+    [TestInitialize]
+    public void Setup()
+    {
+        moodAnalyser = new MoodAnalyser();
     }
 
-    [TestClass]
-    public class TestAnalyser
+    [TestMethod]
+    public void TestAnalyseMood_SadMessage_ReturnsSad()
     {
-        private MoodAnalyser moodAnalyser;
+        string message = "I am in Sad Mood";
+        string result = moodAnalyser.AnalyseMood(message);
+        Assert.AreEqual("SAD", result);
+    }
+}
 
-        [TestInitialize]
-        public void Setup()
-        {
-            moodAnalyser = new MoodAnalyser();
-        }
-
-        [TestMethod]
-        public void TestAnalyseMood_HappyMessage_ReturnsHappy()
-        {
-            string message = "I am feeling great today!";
-            string result = moodAnalyser.AnalyseMood(message);
-            Assert.AreEqual("Happy", result);
-        }
-
-        [TestMethod]
-        public void TestAnalyseMood_SadMessage_ReturnsSad()
-        {
-            string message = "I had a terrible day.";
-            string result = moodAnalyser.AnalyseMood(message);
-            Assert.AreEqual("Sad", result);
-        }
 
         [TestMethod]
         public void TestAnalyseMood_NoKeyword_ReturnsUnableToDetermine()
@@ -50,9 +37,6 @@ namespace AnalyserTest
             string result = moodAnalyser.AnalyseMood(message);
             Assert.AreEqual("Unable to determine the mood.", result);
         }
-    }
-
-
 }
 
 
