@@ -12,7 +12,7 @@ class Program
         test.Setup();
         test.TestAnalyseMood_SadMessage_ReturnsSad();
         test.TestAnalyseMood_AnyMessage_ReturnsHappy();
-        test.TestAnalyseMood_NullMessage_ReturnsUnableToDetermine();
+        test.TestAnalyseMood_NullMessage_ReturnsHappy();
     }
 }
 
