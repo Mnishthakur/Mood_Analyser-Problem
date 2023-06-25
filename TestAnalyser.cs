@@ -1,11 +1,12 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-namespace AnalyserTest
-{
-    class MoodAnalyser
+class MoodAnalyser
 {
     public string AnalyseMood(string message)
     {
-        return "SAD";
+        if (message.ToLower().Contains("sad"))
+            return "SAD";
+        else
+            return "HAPPY";
     }
 }
 
@@ -27,16 +28,13 @@ public class TestAnalyser
         string result = moodAnalyser.AnalyseMood(message);
         Assert.AreEqual("SAD", result);
     }
+
+    [TestMethod]
+    public void TestAnalyseMood_AnyMessage_ReturnsHappy()
+    {
+        string message = "I am in Any Mood";
+        string result = moodAnalyser.AnalyseMood(message);
+        Assert.AreEqual("HAPPY", result);
+    }
 }
-
-
-        [TestMethod]
-        public void TestAnalyseMood_NoKeyword_ReturnsUnableToDetermine()
-        {
-            string message = "I went for a walk.";
-            string result = moodAnalyser.AnalyseMood(message);
-            Assert.AreEqual("Unable to determine the mood.", result);
-        }
-}
-
 
