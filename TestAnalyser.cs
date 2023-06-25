@@ -15,10 +15,21 @@ class MoodAnalyser
 
     public string AnalyseMood()
     {
-        if (message.ToLower().Contains("sad"))
-            return "SAD";
-        else
-            return "HAPPY";
+        try
+        {
+            if (string.IsNullOrEmpty(message))
+                throw new ArgumentNullException("message", "Mood message cannot be null or empty.");
+
+            if (message.ToLower().Contains("sad"))
+                return "SAD";
+            else
+                return "HAPPY";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception occurred: " + ex.Message);
+            return "Unable to determine the mood.";
+        }
     }
 }
 
@@ -49,6 +60,15 @@ public class TestAnalyser
         moodAnalyser = new MoodAnalyser(message);
         string result = moodAnalyser.AnalyseMood();
         Assert.AreEqual("HAPPY", result);
+    }
+
+    [TestMethod]
+    public void TestAnalyseMood_NullMessage_ReturnsUnableToDetermine()
+    {
+        string message = null;
+        moodAnalyser = new MoodAnalyser(message);
+        string result = moodAnalyser.AnalyseMood();
+        Assert.AreEqual("Unable to determine the mood.", result);
     }
 }
 
