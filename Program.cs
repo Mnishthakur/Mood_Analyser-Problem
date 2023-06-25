@@ -1,18 +1,22 @@
-using System;
-namespace moodanalyser
+using System.Numerics;
+using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace AnalyserTest
 {
-  class MoodAnalyser:
-    def __init__(self):
-        self.happy_keywords = ["happy", "joyful", "excited", "great"]
-        self.sad_keywords = ["sad", "unhappy", "miserable", "terrible"]
-        
-    def analyseMood(self, message):
-        message = message.lower()
-        
-        if any(keyword in message for keyword in self.happy_keywords):
-            return "Happy"
-        elif any(keyword in message for keyword in self.sad_keywords):
-            return "Sad"
-        else:
-            return "Unable to determine the mood."
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TestAnalyser test = new TestAnalyser();
+            test.Setup();
+            test.TestAnalyseMood_HappyMessage_ReturnsHappy();
+            test.TestAnalyseMood_SadMessage_ReturnsSad();
+            test.TestAnalyseMood_NoKeyword_ReturnsUnableToDetermine();
+        }
+    }
 }
+
+
+
