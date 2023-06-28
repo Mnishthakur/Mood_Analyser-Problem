@@ -24,30 +24,37 @@ public class Program
 
         // Use reflection to set the message field
         Type moodAnalyserType = typeof(MoodAnalyser);
-        FieldInfo messageField = moodAnalyserType.GetField("message", BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo messageField = moodAnalyserType.GetField("invalidField", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        if (messageField != null)
+        try
         {
-            // Set the message value using reflection
-            messageField.SetValue(moodAnalyser, "I am feeling Happy");
-
-            // Invoke AnalyseMood method using reflection
-            MethodInfo analyseMoodMethod = moodAnalyserType.GetMethod("AnalyseMood");
-            string mood = (string)analyseMoodMethod.Invoke(moodAnalyser, null);
-
-            // Assert the mood is "HAPPY"
-            if (mood == "HAPPY")
+            if (messageField != null)
             {
-                Console.WriteLine("Mood: " + mood);
+                // Set the message value using reflection
+                messageField.SetValue(moodAnalyser, "I am feeling Happy");
+
+                // Invoke AnalyseMood method using reflection
+                MethodInfo analyseMoodMethod = moodAnalyserType.GetMethod("AnalyseMood");
+                string mood = (string)analyseMoodMethod.Invoke(moodAnalyser, null);
+
+                // Assert the mood is "HAPPY"
+                if (mood == "HAPPY")
+                {
+                    Console.WriteLine("Mood: " + mood);
+                }
+                else
+                {
+                    Console.WriteLine("Mood is not HAPPY.");
+                }
             }
             else
             {
-                Console.WriteLine("Mood is not HAPPY.");
+                throw new FieldAccessException("Unable to find the 'message' field in MoodAnalyser class.");
             }
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("Unable to find the 'message' field in MoodAnalyser class.");
+            Console.WriteLine("Error: " + ex.Message);
         }
     }
 }
