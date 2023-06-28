@@ -19,6 +19,22 @@ public class MoodAnalyser
         else
             return "Unknown";
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        MoodAnalyser other = (MoodAnalyser)obj;
+        return message == other.message;
+    }
+
+    public override int GetHashCode()
+    {
+        return message.GetHashCode();
+    }
 }
 
 public class MoodAnalyserFactory
@@ -45,10 +61,14 @@ public class Program
 {
     public static void Main()
     {
-        string message = "I am feeling happy today";
+        string message1 = "I am feeling happy today";
+        string message2 = "I am feeling happy today";
+
         MoodAnalyserFactory factory = new MoodAnalyserFactory();
-        MoodAnalyser moodAnalyser = factory.CreateMoodAnalyser(message);
-        string mood = moodAnalyser.AnalyseMood();
-        Console.WriteLine("Mood: " + mood);
+        MoodAnalyser moodAnalyser1 = factory.CreateMoodAnalyser(message1);
+        MoodAnalyser moodAnalyser2 = factory.CreateMoodAnalyser(message2);
+
+        bool areEqual = moodAnalyser1.Equals(moodAnalyser2);
+        Console.WriteLine("Are MoodAnalyser objects equal? " + areEqual);
     }
 }
