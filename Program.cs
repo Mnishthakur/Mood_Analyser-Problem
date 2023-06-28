@@ -22,16 +22,16 @@ public class Program
     {
         MoodAnalyser moodAnalyser = new MoodAnalyser();
 
-        // Use reflection to set the message field
+        // Use reflection to set the message field to null
         Type moodAnalyserType = typeof(MoodAnalyser);
-        FieldInfo messageField = moodAnalyserType.GetField("invalidField", BindingFlags.NonPublic | BindingFlags.Instance);
+        FieldInfo messageField = moodAnalyserType.GetField("message", BindingFlags.NonPublic | BindingFlags.Instance);
 
         try
         {
             if (messageField != null)
             {
-                // Set the message value using reflection
-                messageField.SetValue(moodAnalyser, "I am feeling Happy");
+                // Set the message value to null using reflection
+                messageField.SetValue(moodAnalyser, null);
 
                 // Invoke AnalyseMood method using reflection
                 MethodInfo analyseMoodMethod = moodAnalyserType.GetMethod("AnalyseMood");
