@@ -5,25 +5,14 @@ public class MoodAnalyser
 {
     private string message;
 
-    public string Message
-    {
-        get { return message; }
-        set { message = value; }
-    }
-
-    public MoodAnalyser(string message)
-    {
-        this.message = message;
-    }
-
     public string AnalyseMood()
     {
         if (message.Contains("happy", StringComparison.OrdinalIgnoreCase))
-            return "Happy";
+            return "HAPPY";
         else if (message.Contains("sad", StringComparison.OrdinalIgnoreCase))
-            return "Sad";
+            return "SAD";
         else
-            return "Unknown";
+            return "UNKNOWN";
     }
 }
 
@@ -31,25 +20,34 @@ public class Program
 {
     public static void Main()
     {
-        string initialMessage = "I am feeling happy today";
-        MoodAnalyser moodAnalyser = new MoodAnalyser(initialMessage);
-        Console.WriteLine("Initial Mood: " + moodAnalyser.AnalyseMood());
+        MoodAnalyser moodAnalyser = new MoodAnalyser();
 
-        // Use reflection to modify the mood dynamically
-        string newMessage = "I am feeling sad now";
+        // Use reflection to set the message field
         Type moodAnalyserType = typeof(MoodAnalyser);
-        PropertyInfo messageProperty = moodAnalyserType.GetProperty("Message");
+        FieldInfo messageField = moodAnalyserType.GetField("message", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        if (messageProperty != null)
+        if (messageField != null)
         {
-            messageProperty.SetValue(moodAnalyser, newMessage);
+            // Set the message value using reflection
+            messageField.SetValue(moodAnalyser, "I am feeling Happy");
 
-            // After modifying the message, analyze the mood again
-            Console.WriteLine("Modified Mood: " + moodAnalyser.AnalyseMood());
+            // Invoke AnalyseMood method using reflection
+            MethodInfo analyseMoodMethod = moodAnalyserType.GetMethod("AnalyseMood");
+            string mood = (string)analyseMoodMethod.Invoke(moodAnalyser, null);
+
+            // Assert the mood is "HAPPY"
+            if (mood == "HAPPY")
+            {
+                Console.WriteLine("Mood: " + mood);
+            }
+            else
+            {
+                Console.WriteLine("Mood is not HAPPY.");
+            }
         }
         else
         {
-            Console.WriteLine("Unable to find the 'Message' property in MoodAnalyser class.");
+            Console.WriteLine("Unable to find the 'message' field in MoodAnalyser class.");
         }
     }
 }
