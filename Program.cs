@@ -41,19 +41,37 @@ public class MoodAnalyserFactory
 {
     public MoodAnalyser CreateMoodAnalyser(string message)
     {
-        Type moodAnalyserType = typeof(MoodAnalyser);
-        ConstructorInfo constructor = moodAnalyserType.GetConstructor(new Type[] { typeof(string) });
+        try
+        {
+            Type moodAnalyserType = Type.GetType("InvalidClassName"); // Provide the improper class name here
+            ConstructorInfo constructor = moodAnalyserType.GetConstructor(new Type[] { typeof(string) });
 
-        if (constructor != null)
-        {
-            object[] constructorArgs = new object[] { message };
-            MoodAnalyser moodAnalyser = (MoodAnalyser)constructor.Invoke(constructorArgs);
-            return moodAnalyser;
+            if (constructor != null)
+            {
+                object[] constructorArgs = new object[] { message };
+                MoodAnalyser moodAnalyser = (MoodAnalyser)constructor.Invoke(constructorArgs);
+                return moodAnalyser;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unable to find the parameterized constructor for MoodAnalyser.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            throw new InvalidOperationException("Unable to find the parameterized constructor for MoodAnalyser.");
+            throw new MoodAnalysisException("Error creating MoodAnalyser object", ex);
         }
+    }
+}
+
+public class MoodAnalysisException : Exception
+{
+    public MoodAnalysisException(string message) : base(message)
+    {
+    }
+
+    public MoodAnalysisException(string message, Exception innerException) : base(message, innerException)
+    {
     }
 }
 
@@ -61,14 +79,17 @@ public class Program
 {
     public static void Main()
     {
-        string message1 = "I am feeling happy today";
-        string message2 = "I am feeling happy today";
-
-        MoodAnalyserFactory factory = new MoodAnalyserFactory();
-        MoodAnalyser moodAnalyser1 = factory.CreateMoodAnalyser(message1);
-        MoodAnalyser moodAnalyser2 = factory.CreateMoodAnalyser(message2);
-
-        bool areEqual = moodAnalyser1.Equals(moodAnalyser2);
-        Console.WriteLine("Are MoodAnalyser objects equal? " + areEqual);
+        try
+        {
+            string message = "I am feeling happy today";
+            MoodAnalyserFactory factory = new MoodAnalyserFactory();
+            MoodAnalyser moodAnalyser = factory.CreateMoodAnalyser(message);
+            string mood = moodAnalyser.AnalyseMood();
+            Console.WriteLine("Mood: " + mood);
+        }
+        catch (MoodAnalysisException ex)
+        {
+            Console.WriteLine("Error: " + ex.Message);
+        }
     }
 }
