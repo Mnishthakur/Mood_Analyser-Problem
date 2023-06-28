@@ -5,6 +5,12 @@ public class MoodAnalyser
 {
     private string message;
 
+    public string Message
+    {
+        get { return message; }
+        set { message = value; }
+    }
+
     public MoodAnalyser(string message)
     {
         this.message = message;
@@ -19,77 +25,31 @@ public class MoodAnalyser
         else
             return "Unknown";
     }
-
-    public override bool Equals(object obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        MoodAnalyser other = (MoodAnalyser)obj;
-        return message == other.message;
-    }
-
-    public override int GetHashCode()
-    {
-        return message.GetHashCode();
-    }
-}
-
-public class MoodAnalyserFactory
-{
-    public MoodAnalyser CreateMoodAnalyser(string message)
-    {
-        try
-        {
-            Type moodAnalyserType = Type.GetType("InvalidClassName"); // Provide the improper class name here
-            ConstructorInfo constructor = moodAnalyserType.GetConstructor(new Type[] { typeof(string) });
-
-            if (constructor != null)
-            {
-                object[] constructorArgs = new object[] { message };
-                MoodAnalyser moodAnalyser = (MoodAnalyser)constructor.Invoke(constructorArgs);
-                return moodAnalyser;
-            }
-            else
-            {
-                throw new InvalidOperationException("Unable to find the parameterized constructor for MoodAnalyser.");
-            }
-        }
-        catch (Exception ex)
-        {
-            throw new MoodAnalysisException("Error creating MoodAnalyser object", ex);
-        }
-    }
-}
-
-public class MoodAnalysisException : Exception
-{
-    public MoodAnalysisException(string message) : base(message)
-    {
-    }
-
-    public MoodAnalysisException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
 }
 
 public class Program
 {
     public static void Main()
     {
-        try
+        string initialMessage = "I am feeling happy today";
+        MoodAnalyser moodAnalyser = new MoodAnalyser(initialMessage);
+        Console.WriteLine("Initial Mood: " + moodAnalyser.AnalyseMood());
+
+        // Use reflection to modify the mood dynamically
+        string newMessage = "I am feeling sad now";
+        Type moodAnalyserType = typeof(MoodAnalyser);
+        PropertyInfo messageProperty = moodAnalyserType.GetProperty("Message");
+
+        if (messageProperty != null)
         {
-            string message = "I am feeling happy today";
-            MoodAnalyserFactory factory = new MoodAnalyserFactory();
-            MoodAnalyser moodAnalyser = factory.CreateMoodAnalyser(message);
-            string mood = moodAnalyser.AnalyseMood();
-            Console.WriteLine("Mood: " + mood);
+            messageProperty.SetValue(moodAnalyser, newMessage);
+
+            // After modifying the message, analyze the mood again
+            Console.WriteLine("Modified Mood: " + moodAnalyser.AnalyseMood());
         }
-        catch (MoodAnalysisException ex)
+        else
         {
-            Console.WriteLine("Error: " + ex.Message);
+            Console.WriteLine("Unable to find the 'Message' property in MoodAnalyser class.");
         }
     }
 }
