@@ -36,7 +36,6 @@ public class MoodAnalyser
         return message.GetHashCode();
     }
 }
-
 public class MoodAnalyserFactory
 {
     public MoodAnalyser CreateMoodAnalyser(string message)
